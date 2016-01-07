@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import ObjectiveC
+
 
 extension UIView {
     
@@ -37,8 +39,6 @@ extension UIView {
 			let hRelations: [[NSLayoutRelation]] = self.getHorizontalRelations(forStackViews: stackedViews, horizontalRelations: horizontalRelations)
 			let hPadding: [[CGFloat]] = self.getHorizontalPadding(forStackViews: stackedViews, horizontalPadding: horizontalPaddings)
 			
-            
-			
 			for index in 0...(stackedViews.count - 1) {
 				if let nLastView = lastView {
                     
@@ -53,6 +53,7 @@ extension UIView {
 			if let nLastView = lastView {
 				nLastView.addCustomConstraints(inView: self, selfAttributes: [.Bottom], otherViewAttributes: [.Bottom], relations: [.Equal], padding: [-bottomPadding])
 			}
+
 			
 	}
 	
@@ -125,6 +126,7 @@ extension UIView {
         otherViewAttributes: [NSLayoutAttribute]? = nil,
         relations: [NSLayoutRelation]? = nil,
         padding: [CGFloat]? = nil )
+        -> [NSLayoutConstraint]
     {
         
         let nRelations: [NSLayoutRelation] = (relations != nil && relations?.count == selfAttributes.count) ? relations! : selfAttributes.map{_ in NSLayoutRelation.Equal}
@@ -140,7 +142,8 @@ extension UIView {
         }
         
         superView.addConstraints(constraints)
-        
+        self.addedLayoutConstraints += constraints
+        return constraints
     }
     
     func getviews(forAttributes attributes: [NSLayoutAttribute], views: [UIView]?, superView: UIView) -> [UIView]{
@@ -168,19 +171,23 @@ extension UIView {
         topLayoutAttribute: NSLayoutAttribute = .Bottom,
         relation: NSLayoutRelation = .Equal,
         padding: CGFloat = 0.0 )
+        -> [NSLayoutConstraint]
     {
-        superView.addConstraints([NSLayoutConstraint(item: self, attribute: selfAttribute, relatedBy: relation, toItem: topLayoutGuide, attribute: topLayoutAttribute, multiplier: 1.0, constant: padding)])
+        let constraints = [NSLayoutConstraint(item: self, attribute: selfAttribute, relatedBy: relation, toItem: topLayoutGuide, attribute: topLayoutAttribute, multiplier: 1.0, constant: padding)]
+        superView.addConstraints(constraints)
+        self.addedLayoutConstraints.appendContentsOf(constraints)
+        return constraints
         
     }
     
     public func addDimensions(width width: CGFloat? = nil, height: CGFloat? = nil, widthRelation: NSLayoutRelation = .Equal, heightRelation: NSLayoutRelation = .Equal) {
-        
         if let w : CGFloat = width {
             let constraints: [NSLayoutConstraint] = [
                 NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Width, relatedBy: widthRelation, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: w),
             ];
             
             self.addConstraints(constraints);
+            self.addedDimensionConstraints.appendContentsOf(constraints)
         }
         if let h: CGFloat = height {
             let constraints: [NSLayoutConstraint] = [
@@ -188,6 +195,7 @@ extension UIView {
             ];
             
             self.addConstraints(constraints);
+            self.addedDimensionConstraints.appendContentsOf(constraints)
         }
         
     }
@@ -195,6 +203,53 @@ extension UIView {
     func abortWithMessage(message: String) {
         assertionFailure(message)
     }
+    
+    
+    //MARK: Animation methods
+    
+    private struct AssociatedKey {
+        static var kAddedLayoutConstraints: String = "kAddedLayoutConstraints"
+        static var kAddedDimensionsConstraints: String = "kAddedDimensionConstraints"
+
+    }
+    
+    public var addedLayoutConstraints: [NSLayoutConstraint] {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKey.kAddedLayoutConstraints) as? [NSLayoutConstraint] ?? []
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.kAddedLayoutConstraints, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    public var addedDimensionConstraints: [NSLayoutConstraint] {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKey.kAddedDimensionsConstraints) as? [NSLayoutConstraint] ?? []
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.kAddedDimensionsConstraints, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    public func animateView(timeInterval: NSTimeInterval, delay: NSTimeInterval = 0.0, options: UIViewAnimationOptions = [], ignoreDimensions: Bool = true, newConstraintsClosure: (() -> ()), completion: (() -> ()) = {}) {
+        //This ensures that the constraints are set http://corsarus.com/2015/auto-layout-and-constraints-animation/
+        UIView.animateWithDuration(0.0) { () -> Void in
+            self.superview?.layoutIfNeeded()
+        }
+        
+        self.superview?.removeConstraints( ignoreDimensions ? self.addedLayoutConstraints: self.addedLayoutConstraints + self.addedDimensionConstraints)
+        newConstraintsClosure()
+        
+        UIView.animateWithDuration(timeInterval, delay: delay, options: options, animations: {[weak self] () -> Void in
+            self?.superview?.layoutIfNeeded()
+        }) { (success:Bool) -> Void in
+            completion()
+        }
+        
+    }
+    
+   
+    
     
 }
 

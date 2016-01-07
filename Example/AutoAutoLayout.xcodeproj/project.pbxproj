@@ -13,6 +13,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		CE076C671C3EC0E30078BCE1 /* VerticalStackingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE076C661C3EC0E30078BCE1 /* VerticalStackingViewController.swift */; };
+		CE076C691C3ECE1A0078BCE1 /* SimpleAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE076C681C3ECE1A0078BCE1 /* SimpleAnimationViewController.swift */; };
 		F10CFEED819AE6BAD965C29C /* Pods_AutoAutoLayout_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD7F1A96D9FF9DD97E5B94E /* Pods_AutoAutoLayout_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		A14CE37A1736CBC845DFFF98 /* Pods_AutoAutoLayout_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AutoAutoLayout_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1F58159BB8E1E2C75AF13E0 /* Pods-AutoAutoLayout_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutoAutoLayout_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AutoAutoLayout_Tests/Pods-AutoAutoLayout_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		CE076C661C3EC0E30078BCE1 /* VerticalStackingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerticalStackingViewController.swift; sourceTree = "<group>"; };
+		CE076C681C3ECE1A0078BCE1 /* SimpleAnimationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleAnimationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				CE076C661C3EC0E30078BCE1 /* VerticalStackingViewController.swift */,
+				CE076C681C3ECE1A0078BCE1 /* SimpleAnimationViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -365,6 +368,7 @@
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				CE076C671C3EC0E30078BCE1 /* VerticalStackingViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				CE076C691C3ECE1A0078BCE1 /* SimpleAnimationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

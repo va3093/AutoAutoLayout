@@ -34,6 +34,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         case 0:
             self.navigationController?.pushViewController(VerticalStackingViewController(), animated: true)
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        case 1:
+            self.navigationController?.pushViewController(SimpleAnimationViewController(), animated: true)
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
         default:
             break;
         }
@@ -42,7 +45,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //MARK: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -51,7 +54,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return cell
         } else {
             let cell = UITableViewCell()
-            cell.textLabel?.text = "Vertical Stacking"
+            switch indexPath.row {
+            case 0:
+                cell.textLabel?.text = "Vertical Stacking"
+            case 1:
+                cell.textLabel?.text = "Simple Animation"
+            default:
+                break;
+            }
             return cell
         }
     }
