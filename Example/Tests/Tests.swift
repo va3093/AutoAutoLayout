@@ -1,6 +1,6 @@
 import UIKit
 import XCTest
-import AutoAutoLayout
+@testable import AutoAutoLayout
 
 class Tests: XCTestCase {
     
@@ -14,16 +14,36 @@ class Tests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+    func testValidateHorizontalAttributes() {
+        let view = UIView()
+        XCTAssert(view.validateHorizontalAttributes(forStackViews: [UIView()], horizontalAttributes: [[]]))
+        XCTAssertFalse(view.validateHorizontalAttributes(forStackViews: [UIView()], horizontalAttributes: []))
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
+    func testValidateHorizontalRelations() {
+        let view = UIView()
+        XCTAssert(view.validateHorizontalRelations(forStackViews: [UIView()], horizontalRelations: [[]]))
+        XCTAssertFalse(view.validateHorizontalRelations(forStackViews: [UIView()], horizontalRelations: []))
     }
     
+    func testValidateHorizontalPadding() {
+        let view = UIView()
+        XCTAssert(view.validateHorizontalPadding(forStackViews: [UIView()], horizontalPadding: [[]]))
+        XCTAssertFalse(view.validateHorizontalPadding(forStackViews: [UIView()], horizontalPadding: []))
+    }
+    
+    func testValidateViews() {
+        let view = UIView()
+        XCTAssert(view.validateViews(forAttributes: [.Top], views: [UIView()]))
+        XCTAssertFalse(view.validateViews(forAttributes: [.Top], views: []))
+    }
+    
+
+    
+}
+
+extension UIView {
+    func abortWithMessage(message: String) {
+        
+    }
 }
