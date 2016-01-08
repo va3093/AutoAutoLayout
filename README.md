@@ -70,19 +70,48 @@ Almost all of AutoAutoLayout is built around the following method:
 ```
 This method allows you to turn this:
 ```swift
-
+	self.wrapperView.addConstraints([
+			NSLayoutConstraint(
+			item: view1, 
+			attribute: NSLayoutAttribute.Top, 
+			relatedBy: NSLayoutRelation.Equal, 
+			toItem: self.wrapperView, 
+			attribute: NSLayoutAttribute.Top, 
+			multiplier: 1.0, 
+			constant: 0.0),
+			
+			NSLayoutConstraint(
+			item: view1, 
+			attribute: NSLayoutAttribute.Leading, 
+			relatedBy: NSLayoutRelation.Equal, 
+			toItem: self.wrapperView, 
+			attribute: NSLayoutAttribute.Leading, 
+			multiplier: 1.0, 
+			constant: 0.0),
+			NSLayoutConstraint(
+			item: view1, 
+			attribute: NSLayoutAttribute.Trailing, 
+			relatedBy: NSLayoutRelation.Equal, 
+			toItem: self.wrapperView, 
+			attribute: NSLayoutAttribute.Trailing, 
+			multiplier: 1.0, 
+			constant: 0.0),
+			
+			NSLayoutConstraint(item: view1, 
+			attribute: NSLayoutAttribute.Bottom, 
+			relatedBy: NSLayoutRelation.Equal, 
+			toItem: self.wrapperView, 
+			attribute: NSLayoutAttribute.Bottom, 
+			multiplier: 1.0, 
+			constant: 0.0)
+			])
 ```
 
 Into this:
 ```swift
-	self.wrapperView.addConstraints([
-			NSLayoutConstraint(item: view1, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self.wrapperView, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0.0),
-			NSLayoutConstraint(item: view1, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: self.wrapperView, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 0.0),
-			NSLayoutConstraint(item: view1, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: self.wrapperView, attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: 0.0),
-			NSLayoutConstraint(item: view1, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: self.wrapperView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0.0)
-
-			])
+        view1.addCustomConstraints(inView: self.wrapperView1, selfAttributes: [.Top, .Leading, .Trailing, .Bottom])
 ```
+
 
 ## Author
 
