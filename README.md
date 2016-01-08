@@ -9,7 +9,7 @@
 
 AutoAutoLayout is a swift library that puts the auto back into AutoLayout.
 
-1. [How it Began](#how-it-began)
+1. [How it began](#how-it-began)
 1. [Requirements](#requirements)
 1. [Integration](#integration)
 1. [Usage](#usage)
@@ -17,6 +17,7 @@ AutoAutoLayout is a swift library that puts the auto back into AutoLayout.
 	- [The bedrock of AutoAutoLayout](#the-bedrock-of-autoautolayout)
 	- [UILayoutSupport support](#uilayoutsupport-support)
 	- [Caveats](#caveats)
+
 ##How it began
 
 For simple projects with simple UI and UX, storyboards are perfect. They can be thrown together quickly and allow for quick feedback to design changes. It also allows you to make customisations to elements on the storyboards with the use of `IBOutlets` and `IBActions`. However as a project grows and the UI becomes more complex your storyboards can introduce bad practices like showing and hiding elements based on some state. They can also become misleading because a glance at a storyboard doesn't illustrate the different states a view can have and as a result give emphasis to one particular state and makes the others difficult to change. 
