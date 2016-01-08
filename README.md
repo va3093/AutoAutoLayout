@@ -13,8 +13,10 @@ AutoAutoLayout is a swift library that puts the auto back into AutoLayout.
 1. [Requirements](#requirements)
 1. [Integration](#integration)
 1. [Usage](#usage)
-	- [Adding Constraints](#adding-constraints)
-
+	- [Everyday Constraints](#everyday-constraints)
+	- [The bedrock of AutoAutoLayout](#the-bedrock-of-autoautolayout)
+	- [UILayoutSupport support](#uilayoutsupport support)
+	- [Caveats](#caveats)
 ##How it began
 
 For simple projects with simple UI and UX, storyboards are perfect. They can be thrown together quickly and allow for quick feedback to design changes. It also allows you to make customisations to elements on the storyboards with the use of `IBOutlets` and `IBActions`. However as a project grows and the UI becomes more complex your storyboards can introduce bad practices like showing and hiding elements based on some state. They can also become misleading because a glance at a storyboard doesn't illustrate the different states a view can have and as a result give emphasis to one particular state and makes the others difficult to change. 
@@ -52,7 +54,38 @@ To use this library in your project manually you may:
 
 ## Usage
 
-#### Adding Constraints
+#### Everyday constraints
+
+AutoAutoLayout has [one fundamental method](#the-bedrock-of-autoautolayout) that allows for easy adding of constraints to views. This method has been further abstracted into helper methods that apply default values for commonly used constraints. If any of these methods don't suit your needs you can alway fall back to the [custom constraints method](#the-bedrock-of-autoautolayout).
+
+##### Constrain to top of view
+[Todo]
+
+##### Constrain to top left of view
+[Todo]
+
+##### Constrain to top right of view
+[Todo]
+
+##### Constrain to bottom view
+[Todo]
+
+##### Constrain to bottom left view
+[Todo]
+
+##### Constrain to bottom right view
+[Todo]
+
+##### Constrain after view
+[Todo]
+
+##### Constrain before view
+[Todo]
+
+##### Add bottom constraint
+[Todo]
+
+#### The bedrock of AutoAutoLayout
 
 Almost all of AutoAutoLayout is built around the following method:
 
@@ -88,6 +121,7 @@ This method allows you to turn this:
 			attribute: NSLayoutAttribute.Leading, 
 			multiplier: 1.0, 
 			constant: 0.0),
+			
 			NSLayoutConstraint(
 			item: view1, 
 			attribute: NSLayoutAttribute.Trailing, 
@@ -111,7 +145,9 @@ Into this:
 ```swift
         view1.addCustomConstraints(inView: self.wrapperView1, selfAttributes: [.Top, .Leading, .Trailing, .Bottom])
 ```
+#### UILayoutSupport support
 
+#### Caveats
 
 ## Author
 
