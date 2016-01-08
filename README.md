@@ -9,13 +9,13 @@
 
 AutoAutoLayout is a swift library that puts the auto back into AutoLayout.
 
-1. [How it Becag](#how-it-began)
+1. [How it Began](#how-it-began)
 1. [Requirements](#requirements)
 1. [Integration](#integration)
 1. [Usage](#usage)
 	- [Everyday Constraints](#everyday-constraints)
 	- [The bedrock of AutoAutoLayout](#the-bedrock-of-autoautolayout)
-	- [UILayoutSupport support](#uilayoutsupport support)
+	- [UILayoutSupport support](#uilayoutsupport-support)
 	- [Caveats](#caveats)
 ##How it began
 
