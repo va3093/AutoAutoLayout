@@ -7,7 +7,15 @@
 
 ##Why AutoAutoLayout was built
 
-The root cause for the development of this tool was problems that using Storyboards and AutoLayout introduce. 
+AutoAutoLayout is a swift library that puts the auto back into AutoLayout.
+
+1. [How it Becag](#how-it-began)
+1. [Requirements](#requirements)
+1. [Integration](#integration)
+1. [Usage](#usage)
+	- [Adding Constraints](#adding-constraints)
+
+##How it began
 
 For simple projects with simple UI and UX, storyboards are perfect. They can be thrown together quickly and allow for quick feedback to design changes. It also allows you to make customisations to elements on the storyboards with the use of `IBOutlets` and `IBActions`. However as a project grows and the UI becomes more complex your storyboards can introduce bad practices like showing and hiding elements based on some state. They can also become misleading because a glance at a storyboard doesn't illustrate the different states a view can have and as a result give emphasis to one particular state and makes the others difficult to change. 
 
@@ -15,8 +23,6 @@ So if you go full circle and move your view layout code into your source files y
 ![Screenshot of update constraints method](ReadmeAssets/constraints.png?raw=true)
 
 The final nail in the coffin is if you require animation. To do animations require keeping reference to the appropriate constraints and doing the UIView.animationwithduration dance remembering all the [caveats](http://stackoverflow.com/questions/18363399/autolayout-animation-issue). The advantages of using Autolayout all of sudden start to feel not worth the hassle. 
-
-__This tool tries to put the auto back into AutoLayout__
 
 ## Requirements
 
@@ -46,7 +52,37 @@ To use this library in your project manually you may:
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+#### Adding Constraints
+
+Almost all of AutoAutoLayout is built around the following method:
+
+```swift
+	public func addCustomConstraints(
+        	inView superView: UIView,
+        	toViews views: [UIView]? = nil,
+        	selfAttributes: [NSLayoutAttribute],
+        	otherViewAttributes: [NSLayoutAttribute]? = nil,
+        	relations: [NSLayoutRelation]? = nil,
+        	padding: [CGFloat]? = nil )
+        	-> [NSLayoutConstraint] {
+			//... 
+		}
+```
+This method allows you to turn this:
+```swift
+
+```
+
+Into this:
+```swift
+	self.wrapperView.addConstraints([
+			NSLayoutConstraint(item: view1, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self.wrapperView, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0.0),
+			NSLayoutConstraint(item: view1, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: self.wrapperView, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 0.0),
+			NSLayoutConstraint(item: view1, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: self.wrapperView, attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: 0.0),
+			NSLayoutConstraint(item: view1, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: self.wrapperView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0.0)
+
+			])
+```
 
 ## Author
 
