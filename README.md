@@ -25,7 +25,9 @@ For simple projects with simple UI and UX, storyboards are perfect. They can be 
 So if you go full circle and move your view layout code into your source files you end up with methods like this (and much worse in some cases :grimacing:)
 ![Screenshot of update constraints method](ReadmeAssets/constraints.png?raw=true)
 
-The final nail in the coffin is if you require animation. To do animations require keeping reference to the appropriate constraints and doing the UIView.animationwithduration dance remembering all the [caveats](http://stackoverflow.com/questions/18363399/autolayout-animation-issue). The advantages of using Autolayout all of sudden start to feel not worth the hassle. 
+The final nail in the coffin is if you require animation. To do animations require keeping reference to the appropriate constraints and doing the UIView.animationwithduration dance remembering all the [caveats](http://stackoverflow.com/questions/18363399/autolayout-animation-issue). The advantages of using Autolayout all of sudden start to feel not worth the hassle.
+
+Enter AutoAutoLayout. This library reduces the amount of work you need to do to maintain constraints in code. It also lets you perform animations in your view while still maintaining the powers of the autolayout constraint engine but with the effort of animating frames. 
 
 ## Requirements
 
@@ -91,13 +93,15 @@ AutoAutoLayout has [one fundamental method](#the-bedrock-of-autoautolayout) that
 Almost all of AutoAutoLayout is built around the following method:
 
 ```swift
-	public func addCustomConstraints(
+	 public func addCustomConstraints(
         	inView superView: UIView,
         	toViews views: [UIView]? = nil,
         	selfAttributes: [NSLayoutAttribute],
+		relations: [NSLayoutRelation]? = nil,
         	otherViewAttributes: [NSLayoutAttribute]? = nil,
-        	relations: [NSLayoutRelation]? = nil,
-        	padding: [CGFloat]? = nil )
+		multipliers: [CGFloat]? = nil,
+        	padding: [CGFloat]? = nil,
+		priorities: [UILayoutPriority]? = nil)
         	-> [NSLayoutConstraint] {
 			//... 
 		}
@@ -146,6 +150,18 @@ Into this:
 ```swift
         view1.addCustomConstraints(inView: self.wrapperView1, selfAttributes: [.Top, .Leading, .Trailing, .Bottom])
 ```
+This is possible because appropriate defaults are applied to fill values that are predominantly the same. For example The multiplier in the NSLayoutConstraint is usually `1.0`. You usually constrain the top of a view to a top of another view and you usually constrain something to its superview. However, there are many ways that to add constraints and this method gives you the utility to be as specific as you want while still being able to make sense of your constraints by looking at one method. For example,
+
+```swift
+	self.wrapperView3.addCustomConstraints(inView: self.view,
+			toViews: [self.wrapperView2, self.wrapperView1, self.wrapperView2],
+			selfAttributes: [.Top, .Leading, .Trailing],
+			otherViewAttributes: [.Bottom, .Leading, .Trailing],
+			relations: [.GreaterThanOrEqual, .Equal, .LessThanOrEqual],
+			padding: [8.0, 0.0, 0.0],
+			priorities: [750.0, 800.0, 500.0])
+```
+
 #### UILayoutSupport support
 
 #### Caveats
