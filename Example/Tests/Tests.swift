@@ -21,15 +21,17 @@ class Tests: XCTestCase {
     }
     
     func testValidateHorizontalRelations() {
-        let view = UIView()
-        XCTAssert(view.validateHorizontalRelations(forStackViews: [UIView()], horizontalRelations: [[]]))
-        XCTAssertFalse(view.validateHorizontalRelations(forStackViews: [UIView()], horizontalRelations: []))
+        let attributes = [[NSLayoutAttribute.Top]]
+		let view = UIView()
+        XCTAssert(view.validateHorizontalRelations(attributes, horizontalRelations: [[]]))
+        XCTAssertFalse(view.validateHorizontalRelations(attributes, horizontalRelations: []))
     }
-    
+	
     func testValidateHorizontalPadding() {
-        let view = UIView()
-        XCTAssert(view.validateHorizontalPadding(forStackViews: [UIView()], horizontalPadding: [[]]))
-        XCTAssertFalse(view.validateHorizontalPadding(forStackViews: [UIView()], horizontalPadding: []))
+		let attributes = [[NSLayoutAttribute.Top]]
+		let view = UIView()
+        XCTAssert(view.validateHorizontalPadding(attributes, horizontalPadding: [[]]))
+        XCTAssertFalse(view.validateHorizontalPadding(attributes, horizontalPadding: []))
     }
     
     func testValidateViews() {

@@ -104,6 +104,9 @@ class VerticalStackingViewController: UIViewController {
         
         let stackedViews = [view1, view2, view3]
         self.wrapperView3.addSubviews(stackedViews)
+		
+		
+		
         self.wrapperView3.stackViews(stackedViews,
             horizontalAttributes:[[.Leading, .Trailing], [.Leading, .Trailing], [.Leading, .Trailing]],
             horizontalPaddings: [[0.0, -8.0], [0.0, -8.0], [0.0, -8.0]] ,
@@ -112,34 +115,7 @@ class VerticalStackingViewController: UIViewController {
             topPadding: 8.0,
             bottomPadding: 8.0)
         
-        // Add constraints programmatically one-by-one:
-        self.view.addConstraint(NSLayoutConstraint(
-            item:self.wrapperView1, attribute:.CenterX,
-            relatedBy:.Equal, toItem:self.view,
-            attribute:.CenterX, multiplier:0.5, constant:0))
-        self.view.addConstraint(NSLayoutConstraint(
-            item:self.wrapperView1, attribute:.CenterY,
-            relatedBy:.Equal, toItem:self.view,
-            attribute:.CenterY, multiplier:1, constant:0))
-        
-        self.view.addConstraint(NSLayoutConstraint(
-            item:self.wrapperView2, attribute:.CenterX,
-            relatedBy:.Equal, toItem:self.view,
-            attribute:.CenterX, multiplier:1, constant:0))
-        self.view.addConstraint(NSLayoutConstraint(
-            item:self.wrapperView2, attribute:.CenterY,
-            relatedBy:.Equal, toItem:self.view,
-            attribute:.Top, multiplier:1, constant:self.view.center.y/2))
-        
-        self.view.addConstraint(NSLayoutConstraint(
-            item:self.wrapperView3, attribute:.CenterX,
-            relatedBy:.Equal, toItem:self.view,
-            attribute:.CenterX, multiplier:1.5, constant:0))
-        self.view.addConstraint(NSLayoutConstraint(
-            item:self.wrapperView3, attribute:.CenterY,
-            relatedBy:.Equal, toItem:self.view,
-            attribute:.Bottom,multiplier:1, constant:-self.view.center.y/2))
-        
+		
     }
     
     //MARK: Business Logic

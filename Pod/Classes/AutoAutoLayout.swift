@@ -36,8 +36,8 @@ extension UIView {
 		) {
 			var lastView: UIView?
 			let hAttributes: [[NSLayoutAttribute]] = self.getHorizontalAttributes(forStackViews: stackedViews, horizontalAttributes: horizontalAttributes)
-			let hRelations: [[NSLayoutRelation]] = self.getHorizontalRelations(forStackViews: stackedViews, horizontalRelations: horizontalRelations)
-			let hPadding: [[CGFloat]] = self.getHorizontalPadding(forStackViews: stackedViews, horizontalPadding: horizontalPaddings)
+			let hRelations: [[NSLayoutRelation]] = self.getHorizontalRelations(hAttributes, horizontalRelations: horizontalRelations)
+			let hPadding: [[CGFloat]] = self.getHorizontalPadding(hAttributes, horizontalPadding: horizontalPaddings)
 			
 			for index in 0...(stackedViews.count - 1) {
 				if let nLastView = lastView {
@@ -78,66 +78,86 @@ extension UIView {
         return isValid
 	}
 	
-	func getHorizontalRelations(forStackViews stackViews: [UIView], horizontalRelations: [[NSLayoutRelation]]?) -> [[NSLayoutRelation]]{
+	func getHorizontalRelations(horizontalAttributes: [[NSLayoutAttribute]], horizontalRelations: [[NSLayoutRelation]]?) -> [[NSLayoutRelation]]{
 		if let hRelations = horizontalRelations {
-			self.validateHorizontalRelations(forStackViews: stackViews, horizontalRelations: hRelations)
+			self.validateHorizontalRelations(horizontalAttributes, horizontalRelations: hRelations)
 			return hRelations
 		}
 		else {
-            return  stackViews.map({ (view: UIView) -> [NSLayoutRelation] in
-                return [NSLayoutRelation.Equal]
+            return  horizontalAttributes.map({ (attributes: [NSLayoutAttribute]) -> [NSLayoutRelation] in
+				return attributes.map({ _ in NSLayoutRelation.Equal})
             })
 		}
 	}
 	
-	func validateHorizontalRelations(forStackViews stackViews: [UIView], horizontalRelations: [[NSLayoutRelation]]) -> Bool {
-        let isValid = horizontalRelations.count == stackViews.count
+	func validateHorizontalRelations(horizontalAttributes: [[NSLayoutAttribute]], horizontalRelations: [[NSLayoutRelation]]) -> Bool {
+        let isValid = horizontalRelations.count == horizontalAttributes.count
         if !isValid {
-            self.abortWithMessage("The number of views to stack to should equal the number of horizontal relation sets provided. At the moment you have provided \(stackViews.count) views to stack and \(horizontalRelations.count) horizontal relation sets")
+            self.abortWithMessage("The number of attribute sets used should match the number of NSLayoutRelation sets passed in")
         }
         return isValid
 	}
-    
 	
-	func getHorizontalPadding(forStackViews stackViews: [UIView], horizontalPadding: [[CGFloat]]?) -> [[CGFloat]]{
+	func getHorizontalPadding(horizontalAttributes: [[NSLayoutAttribute]], horizontalPadding: [[CGFloat]]?) -> [[CGFloat]]{
 		if let hPadding = horizontalPadding {
-			self.validateHorizontalPadding(forStackViews: stackViews, horizontalPadding: hPadding)
+			self.validateHorizontalPadding(horizontalAttributes, horizontalPadding: hPadding)
 			return hPadding
 		}
 		else {
-            return  stackViews.map({ (view: UIView) -> [CGFloat] in
-                return [0.0]
-            })
+			return  horizontalAttributes.map({ (attributes: [NSLayoutAttribute]) -> [CGFloat] in
+				return attributes.map({ _ in 0.0})
+			})
 		}
 	}
 	
-	func validateHorizontalPadding(forStackViews stackViews: [UIView], horizontalPadding: [[CGFloat]]) -> Bool {
-        let isValid = horizontalPadding.count == stackViews.count
-        if !isValid {
-            self.abortWithMessage("The number of views to stack to should equal the number of padding sets provided. At the moment you have provided \(stackViews.count) views to stack and \(horizontalPadding.count) padding sets")
-        }
-        return isValid
+	func validateHorizontalPadding(horizontalAttributes: [[NSLayoutAttribute]], horizontalPadding: [[CGFloat]]) -> Bool {
+		let isValid = horizontalPadding.count == horizontalAttributes.count
+		if !isValid {
+			self.abortWithMessage("The number of attribute sets used should match the number of padding sets passed in")
+		}
+		return isValid
 	}
-    
+	
+	
     public func addCustomConstraints(
         inView superView: UIView,
         toViews views: [UIView]? = nil,
         selfAttributes: [NSLayoutAttribute],
+		relations: [NSLayoutRelation]? = nil,
         otherViewAttributes: [NSLayoutAttribute]? = nil,
-        relations: [NSLayoutRelation]? = nil,
-        padding: [CGFloat]? = nil )
+		multipliers: [CGFloat]? = nil,
+        padding: [CGFloat]? = nil,
+		priorities: [UILayoutPriority]? = nil
+		)
         -> [NSLayoutConstraint]
     {
-        
-        let nRelations: [NSLayoutRelation] = (relations != nil && relations?.count == selfAttributes.count) ? relations! : selfAttributes.map{_ in NSLayoutRelation.Equal}
-        let nPadding: [CGFloat] = (padding != nil && padding?.count == selfAttributes.count) ? padding! : selfAttributes.map{_ in 0.0}
-        let nOtherViewAttributes: [NSLayoutAttribute] = (otherViewAttributes != nil && otherViewAttributes?.count == selfAttributes.count) ? otherViewAttributes! : selfAttributes
-        let otherViews: [UIView] = self.getviews(forAttributes: selfAttributes, views: views, superView: superView)
-        var constraints: [NSLayoutConstraint] = []
+		let nRelations: [NSLayoutRelation] = self.getConstraintElements(forReferenceElement: selfAttributes, inputElements: relations, abortMessage: "The number of NSLayoutRelations provided must be the same as the number of NSLayoutAttributes for the item being constrained") { () -> [NSLayoutRelation] in
+			return selfAttributes.map({_ in return NSLayoutRelation.Equal})
+		}
+		let otherViews: [UIView] = self.getviews(forAttributes: selfAttributes, views: views, superView: superView)
+		
+		let nOtherViewAttributes: [NSLayoutAttribute] = self.getConstraintElements(forReferenceElement: selfAttributes, inputElements: otherViewAttributes, abortMessage: "The number of NSLayoutAttributes provided for the other views should be the same as for the attributes provided for the view being constrained") { () -> [NSLayoutAttribute] in
+			return selfAttributes
+		}
+		
+		let nMultipliers: [CGFloat] = self.getConstraintElements(forReferenceElement: selfAttributes, inputElements: multipliers, abortMessage: "The number of multipliers must mathc the number of attributes provided for the view being constrained") { () -> [CGFloat] in
+			return selfAttributes.map({_ in 1.0})
+		}
+		
+		let nPadding: [CGFloat] = self.getConstraintElements(forReferenceElement: selfAttributes, inputElements: padding, abortMessage: "The number of padding values provided should be the same as the ammount of attributes provided for the view being constrained") { () -> [CGFloat] in
+			return selfAttributes.map({_ in return CGFloat(0.0)})
+		}
+		
+		let nPriorities: [UILayoutPriority] = self.getConstraintElements(forReferenceElement: selfAttributes, inputElements: priorities, abortMessage: "The number of priorities should be the same as the amoutn of attributes provided for the view being constrained") { () -> [UILayoutPriority] in
+			return selfAttributes.map({_ in return UILayoutPriorityRequired})
+		}
+		
+		
+		var constraints: [NSLayoutConstraint] = []
         
         for index in 0...(selfAttributes.count - 1) {
-                constraints.append(NSLayoutConstraint(item: self, attribute: selfAttributes[index], relatedBy: nRelations[index], toItem: otherViews[index], attribute: nOtherViewAttributes[index], multiplier: 1.0, constant: nPadding[index]))
-            
+			constraints.append(NSLayoutConstraint(item: self, attribute: selfAttributes[index], relatedBy: nRelations[index], toItem: otherViews[index], attribute: nOtherViewAttributes[index], multiplier: nMultipliers[index], constant: nPadding[index], priority: nPriorities[index]))
+			
             
         }
         
@@ -163,6 +183,25 @@ extension UIView {
         }
         return isValid
     }
+	
+	func getConstraintElements<T, U>(forReferenceElement referenceElements: [T], inputElements: [U]?, abortMessage: String, defaultElementsClosure: (() ->[U]) )-> [U] {
+		if let inputEl = inputElements {
+			self.validateElementst(referenceElements, inputElements: inputEl, abortMessage: abortMessage)
+			return inputEl
+		}
+		else {
+			return defaultElementsClosure()
+		}
+	}
+	
+	func validateElementst<T, U>(referenceElements: [T], inputElements: [U], abortMessage: String) -> Bool {
+		let isValid: Bool = (referenceElements.count == inputElements.count)
+		
+		if !isValid {
+			self.abortWithMessage(abortMessage)
+		}
+		return isValid
+	}
     
     public func addConstraintToTopLayoutGuide(
         inView superView: UIView,
@@ -313,6 +352,13 @@ public extension UIButton {
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }
+}
+
+public extension NSLayoutConstraint {
+	convenience init(item view1: AnyObject, attribute attr1: NSLayoutAttribute, relatedBy relation: NSLayoutRelation, toItem view2: AnyObject?, attribute attr2: NSLayoutAttribute, multiplier: CGFloat, constant c: CGFloat, priority: UILayoutPriority) {
+		self.init(item: view1, attribute: attr1, relatedBy: relation, toItem: view2, attribute: attr2, multiplier: multiplier, constant: c)
+		self.priority = priority
+	}
 }
 
 
