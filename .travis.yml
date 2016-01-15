@@ -6,7 +6,7 @@ language: objective-c  #1
 osx_image: xcode7.2 #2
 xcode_workspace: Example/AutoAutoLayout.xcworkspcae #3
 xcode_scheme: AutoAutoLayout-Example #4
-xcode_sdk: iphonesimulator8.4 #5
+xcode_sdk: iphonesimulator9.1 #5
 cache: cocoapods
 podfile: Example/Podfile
 # before_install:
