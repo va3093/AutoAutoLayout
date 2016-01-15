@@ -1,6 +1,6 @@
 # AutoAutoLayout
 
-[![CI Status](http://img.shields.io/travis/Wilhelm/AutoAutoLayout.svg?style=flat)](https://travis-ci.org/Wilhelm/AutoAutoLayout)
+[![CI Status](http://img.shields.io/travis/Wilhelm/AutoAutoLayout.svg?style=flat)](https://travis-ci.org/va3093/AutoAutoLayout)
 [![Version](https://img.shields.io/cocoapods/v/AutoAutoLayout.svg?style=flat)](http://cocoapods.org/pods/AutoAutoLayout)
 [![License](https://img.shields.io/cocoapods/l/AutoAutoLayout.svg?style=flat)](http://cocoapods.org/pods/AutoAutoLayout)
 [![Platform](https://img.shields.io/cocoapods/p/AutoAutoLayout.svg?style=flat)](http://cocoapods.org/pods/AutoAutoLayout)
